@@ -30,6 +30,8 @@ import type { Hex } from '../types/misc.js'
 import { namehash } from '../utils/ens/namehash.js'
 import { rpc } from '../utils/rpc.js'
 
+import { keccak256 } from '../utils/hash/keccak256.js'
+import { serializeTransaction } from '../utils/transaction/serializeTransaction.js'
 import { baycContractConfig, ensRegistryConfig } from './abis.js'
 import {
   accounts,
@@ -73,6 +75,12 @@ const provider = {
   request: async ({ method, params }: any) => {
     if (method === 'eth_requestAccounts') {
       return [accounts[0].address]
+    }
+    if (method === 'eth_signTransaction') {
+      method = 'personal_sign'
+      const transaction = params[0]
+      const hash = keccak256(serializeTransaction(transaction))
+      params = [hash, transaction.from]
     }
     if (method === 'personal_sign') {
       method = 'eth_sign'

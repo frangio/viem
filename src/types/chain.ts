@@ -3,7 +3,7 @@ import type { Address } from 'abitype'
 
 import type { Formatters } from './formatter.js'
 import type { Serializers } from './serializer.js'
-import type { IsUndefined } from './utils.js'
+import type { IsUndefined, MaybeNullable } from './utils.js'
 
 export type Chain<
   TFormatters extends Formatters | undefined = Formatters | undefined,
@@ -23,6 +23,7 @@ export type ChainContract = {
 export type GetChain<
   TChain extends Chain | undefined,
   TChainOverride extends Chain | undefined = undefined,
+  TConfig extends { Nullable: boolean } = { Nullable: true },
 > = IsUndefined<TChain> extends true
-  ? { chain: TChainOverride | null }
-  : { chain?: TChainOverride | null }
+  ? { chain: MaybeNullable<TChainOverride, TConfig['Nullable']> }
+  : { chain?: MaybeNullable<TChainOverride, TConfig['Nullable']> }

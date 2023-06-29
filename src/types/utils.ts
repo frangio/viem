@@ -107,6 +107,20 @@ export type MaybeRequired<T, TRequired extends boolean> = TRequired extends true
   : T
 
 /**
+ * @description Makes the attribute on the type T to be nullable if TNullable is true.
+ *
+ * @example
+ * MaybeNullable<string, true>
+ * => string | null
+ *
+ * MaybeNullable<string, false>
+ * => string
+ */
+export type MaybeNullable<T, TNullable extends boolean> = TNullable extends true
+  ? T | null
+  : T
+
+/**
  * @description Makes the attribute on the type T allow undefined if TUndefinedish is true.
  *
  * @example
